@@ -13,8 +13,9 @@
 ## 页面说明
 
 - `index.html` - 主页，展示今明两天的天气预报
-- `weather_forecast_chinese.html` - 详细的中文天气预报（使用模拟数据）
+- `weather_forecast_chinese.html` - 详细的中文天气预报（使用真实API数据）
 - `weather_real.html` - 真实天气数据版（使用API获取实时数据）
+- `README.md` - 项目说明文档
 
 ## 技术栈
 
@@ -27,11 +28,24 @@
 ## 使用说明
 
 1. 直接在浏览器中打开任意HTML文件即可查看
-2. 如需使用真实天气数据，请在 `weather_real.html` 中替换为您自己的API密钥
+2. 如需使用真实天气数据功能，请获取OpenWeatherMap API密钥并替换代码中的占位符
 
 ## API密钥配置
 
-如需使用真实天气数据功能，请前往 [OpenWeatherMap](https://openweathermap.org/api) 获取免费API密钥，并替换 `weather_real.html` 文件中的API密钥。
+**安全提示：出于安全考虑，API密钥不应在客户端代码中硬编码。**
+
+要使用真实天气数据功能，请按照以下步骤操作：
+
+1. 前往 [OpenWeatherMap](https://openweathermap.org/api) 获取免费API密钥
+2. 在每个HTML文件中，将 `YOUR_API_KEY_HERE` 替换为您的实际API密钥
+3. 对于生产环境，建议使用后端服务器代理API请求以保护API密钥
+
+## 安全最佳实践
+
+- 不要在公共代码库中暴露API密钥
+- 考虑使用后端代理服务器来转发API请求
+- 定期轮换API密钥
+- 限制API密钥的使用范围和权限
 
 ## 许可证
 
