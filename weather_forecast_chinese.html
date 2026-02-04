@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>15日天气预报 - 杭州 & 西安</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .city-section {
+            padding: 30px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .city-section:last-child {
+            border-bottom: none;
+        }
+
+        .city-section h2 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .chart-container {
+            height: 400px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .weather-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .weather-card {
+            background: linear-gradient(to bottom right, #ecf0f1, #bdc3c7);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .weather-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .weather-card h3 {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .weather-data {
+            font-size: 0.9rem;
+        }
+
+        .temp {
+            font-weight: bold;
+            color: #e74c3c;
+            font-size: 1.2rem;
+        }
+
+        .humidity {
+            color: #3498db;
+        }
+
+        .precipitation {
+            color: #2ecc71;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .city-section {
+                padding: 20px 15px;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+            
+            .weather-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>15日天气预报</h1>
+            <p>杭州 & 西安 天气预报</p>
+        </header>
+        
+        <div class="city-section" id="hangzhou-section">
+            <h2>杭州</h2>
+            <div class="chart-container">
+                <canvas id="hangzhouChart"></canvas>
+            </div>
+            <div class="weather-grid" id="hangzhouGrid"></div>
+        </div>
+        
+        <div class="city-section" id="xian-section">
+            <h2>西安</h2>
+            <div class="chart-container">
+                <canvas id="xianChart"></canvas>
+            </div>
+            <div class="weather-grid" id="xianGrid"></div>
+        </div>
+    </div>
+    
+    <script>
+        // 生成15天模拟天气数据
+        function generateMockData(city) {
+            const data = [];
+            const today = new Date();
+            
+            for (let i = 0; i < 15; i++) {
+                const date = new Date();
+                date.setDate(today.getDate() + i);
+                
+                // 根据城市设置基础温度
+                let baseTemp;
+                if (city === '杭州') {
+                    baseTemp = 18; // 杭州通常更暖和
+                } else {
+                    baseTemp = 15; // 西安通常更凉爽
+                }
+                
+                // 添加变化
+                const temp = baseTemp + Math.floor(Math.random() * 10) - 5; // 范围: 基础温度-5 到 基础温度+5
+                const maxTemp = temp + Math.floor(Math.random() * 5) + 2; // 最高温度更高
+                const minTemp = temp - Math.floor(Math.random() * 5) - 2; // 最低温度更低
+                
+                data.push({
+                    date: date.toISOString().split('T')[0],
+                    dayOfWeek: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'][date.getDay()],
+                    maxTemp: maxTemp,
+                    minTemp: minTemp,
+                    avgTemp: temp,
+                    humidity: Math.floor(Math.random() * 40) + 40, // 40-80%
+                    precipitation: Math.floor(Math.random() * 100), // 0-100%
+                    condition: getRandomCondition()
+                });
+            }
+            
+            return data;
+        }
+
+        function getRandomCondition() {
+            const conditions = [
+                '晴天', '多云', '阴天', 
+                '小雨', '中雨', '大雨',
+                '雷阵雨', '雾', '大风'
+            ];
+            return conditions[Math.floor(Math.random() * conditions.length)];
+        }
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为两个城市生成模拟数据
+            const hangzhouData = generateMockData('杭州');
+            const xianData = generateMockData('西安');
+            
+            // 渲染天气网格
+            renderWeatherGrid(hangzhouData, 'hangzhouGrid');
+            renderWeatherGrid(xianData, 'xianGrid');
+            
+            // 创建图表
+            createTemperatureChart(hangzhouData, 'hangzhouChart', '杭州');
+            createTemperatureChart(xianData, 'xianChart', '西安');
+        });
+
+        function renderWeatherGrid(data, containerId) {
+            const container = document.getElementById(containerId);
+            
+            data.forEach(day => {
+                const card = document.createElement('div');
+                card.className = 'weather-card';
+                
+                card.innerHTML = `
+                    <h3>${day.dayOfWeek}<br><small>${day.date.split('-')[1]}/${day.date.split('-')[2]}</small></h3>
+                    <div class="weather-data">
+                        <div class="temp">最高:${day.maxTemp}° 最低:${day.minTemp}°</div>
+                        <div>平均: ${day.avgTemp}°C</div>
+                        <div class="humidity">湿度: ${day.humidity}%</div>
+                        <div class="precipitation">降水: ${day.precipitation}%</div>
+                        <div>天气: ${day.condition}</div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        function createTemperatureChart(data, canvasId, cityName) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            
+            // 准备图表数据
+            const labels = data.map(day => `${day.dayOfWeek}\n${day.date.split('-')[1]}/${day.date.split('-')[2]}`);
+            const maxTemps = data.map(day => day.maxTemp);
+            const minTemps = data.map(day => day.minTemp);
+            const avgTemps = data.map(day => day.avgTemp);
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: '最高温度 (°C)',
+                            data: maxTemps,
+                            borderColor: '#e74c3c',
+                            backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.3
+                        },
+                        {
+                            label: '平均温度 (°C)',
+                            data: avgTemps,
+                            borderColor: '#3498db',
+                            backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.3
+                        },
+                        {
+                            label: '最低温度 (°C)',
+                            data: minTemps,
+                            borderColor: '#34495e',
+                            backgroundColor: 'rgba(52, 73, 94, 0.1)',
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `${cityName} - 15日温度预报`,
+                            font: {
+                                size: 16
+                            }
+                        },
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: '温度 (°C)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '日期'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
