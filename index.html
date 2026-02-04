@@ -47,6 +47,20 @@
             margin-bottom: 20px;
         }
 
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.5rem;
+            color: #2d3436;
+        }
+
+        .error {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.5rem;
+            color: #d63031;
+        }
+
         .weather-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -177,68 +191,281 @@
             <div class="subtitle">杭州 & 西安 今明两日天气</div>
         </header>
 
-        <div class="weather-container">
-            <!-- 杭州天气 -->
-            <div class="city-weather">
-                <div class="city-name">🏙️ 杭州</div>
-                
-                <!-- 今天天气 -->
-                <div class="day-weather">
-                    <div class="day-title">Today 今天</div>
-                    <div class="temperature">22°C ☀️</div>
-                    <div class="weather-info">天气: 晴朗</div>
-                    <div class="weather-info">湿度: 65%</div>
-                    <div class="weather-info">风速: 12 km/h</div>
-                </div>
-                
-                <!-- 明天天气 -->
-                <div class="day-weather">
-                    <div class="day-title">Tomorrow 明天</div>
-                    <div class="temperature">20°C 🌤️</div>
-                    <div class="weather-info">天气: 多云</div>
-                    <div class="weather-info">湿度: 70%</div>
-                    <div class="weather-info">风速: 10 km/h</div>
-                </div>
-            </div>
-
-            <!-- 西安天气 -->
-            <div class="city-weather">
-                <div class="city-name">🏛️ 西安</div>
-                
-                <!-- 今天天气 -->
-                <div class="day-weather">
-                    <div class="day-title">Today 今天</div>
-                    <div class="temperature">18°C 🌤️</div>
-                    <div class="weather-info">天气: 多云</div>
-                    <div class="weather-info">湿度: 55%</div>
-                    <div class="weather-info">风速: 8 km/h</div>
-                </div>
-                
-                <!-- 明天天气 -->
-                <div class="day-weather">
-                    <div class="day-title">Tomorrow 明天</div>
-                    <div class="temperature">16°C 🌦️</div>
-                    <div class="weather-info">天气: 阴转小雨</div>
-                    <div class="weather-info">湿度: 75%</div>
-                    <div class="weather-info">风速: 14 km/h</div>
-                </div>
-            </div>
+        <div id="loading" class="loading">
+            正在获取天气数据...
         </div>
 
-        <div class="navigation">
-            <div class="nav-buttons">
-                <a href="weather_forecast_chinese.html" class="nav-button">详细预报 (中文)</a>
-                <a href="weather_real.html" class="nav-button">真实数据预报</a>
+        <div id="error" class="error" style="display: none;">
+            无法获取天气数据，请稍后重试
+        </div>
+
+        <div id="content" style="display: none;">
+            <div class="weather-container">
+                <!-- 杭州天气 -->
+                <div class="city-weather">
+                    <div class="city-name">🏙️ 杭州</div>
+                    
+                    <!-- 今天天气 -->
+                    <div class="day-weather">
+                        <div class="day-title">Today 今天</div>
+                        <div id="hangzhou-today-temp" class="temperature">--°C</div>
+                        <div id="hangzhou-today-condition" class="weather-info">天气: --</div>
+                        <div id="hangzhou-today-humidity" class="weather-info">湿度: --%</div>
+                        <div id="hangzhou-today-wind" class="weather-info">风速: -- km/h</div>
+                    </div>
+                    
+                    <!-- 明天天气 -->
+                    <div class="day-weather">
+                        <div class="day-title">Tomorrow 明天</div>
+                        <div id="hangzhou-tomorrow-temp" class="temperature">--°C</div>
+                        <div id="hangzhou-tomorrow-condition" class="weather-info">天气: --</div>
+                        <div id="hangzhou-tomorrow-humidity" class="weather-info">湿度: --%</div>
+                        <div id="hangzhou-tomorrow-wind" class="weather-info">风速: -- km/h</div>
+                    </div>
+                </div>
+
+                <!-- 西安天气 -->
+                <div class="city-weather">
+                    <div class="city-name">🏛️ 西安</div>
+                    
+                    <!-- 今天天气 -->
+                    <div class="day-weather">
+                        <div class="day-title">Today 今天</div>
+                        <div id="xian-today-temp" class="temperature">--°C</div>
+                        <div id="xian-today-condition" class="weather-info">天气: --</div>
+                        <div id="xian-today-humidity" class="weather-info">湿度: --%</div>
+                        <div id="xian-today-wind" class="weather-info">风速: -- km/h</div>
+                    </div>
+                    
+                    <!-- 明天天气 -->
+                    <div class="day-weather">
+                        <div class="day-title">Tomorrow 明天</div>
+                        <div id="xian-tomorrow-temp" class="temperature">--°C</div>
+                        <div id="xian-tomorrow-condition" class="weather-info">天气: --</div>
+                        <div id="xian-tomorrow-humidity" class="weather-info">湿度: --%</div>
+                        <div id="xian-tomorrow-wind" class="weather-info">风速: -- km/h</div>
+                    </div>
+                </div>
             </div>
-            
-            <div class="language-toggle">
-                <button class="language-btn active" onclick="switchLanguage('zh')">中文</button>
-                <button class="language-btn" onclick="switchLanguage('en')">English</button>
+
+            <div class="navigation">
+                <div class="nav-buttons">
+                    <a href="weather_forecast_chinese.html" class="nav-button">详细预报 (中文)</a>
+                    <a href="weather_real.html" class="nav-button">真实数据预报</a>
+                </div>
+                
+                <div class="language-toggle">
+                    <button class="language-btn active" onclick="switchLanguage('zh')">中文</button>
+                    <button class="language-btn" onclick="switchLanguage('en')">English</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        // 使用 OpenWeatherMap API 获取真实天气数据
+        const API_KEY = '2383424dfab9f6d2a52467e80d0a89d9'; // 使用您提供的API密钥
+        const API_URL = 'https://api.openweathermap.org/data/2.5';
+
+        // 城市坐标
+        const cities = {
+            hangzhou: { name: '杭州', lat: 30.2741, lon: 120.1551 },
+            xian: { name: '西安', lat: 34.3416, lon: 108.9398 }
+        };
+
+        // 将天气代码转换为中文描述
+        function getWeatherDescription(weatherCode, mainWeather) {
+            const descriptions = {
+                'Thunderstorm': '雷阵雨',
+                'Drizzle': '毛毛雨',
+                'Rain': '雨',
+                'Snow': '雪',
+                'Clear': '晴天',
+                'Clouds': '多云',
+                'Mist': '薄雾',
+                'Smoke': '烟雾',
+                'Haze': '霾',
+                'Dust': '尘土',
+                'Fog': '雾',
+                'Sand': '沙尘',
+                'Ash': '火山灰',
+                'Squall': '飑线',
+                'Tornado': '龙卷风'
+            };
+            
+            // 根据天气代码返回描述
+            if (weatherCode >= 200 && weatherCode < 300) return '雷阵雨';
+            if (weatherCode >= 300 && weatherCode < 400) return '毛毛雨';
+            if (weatherCode >= 500 && weatherCode < 600) return '雨';
+            if (weatherCode >= 600 && weatherCode < 700) return '雪';
+            if (weatherCode >= 700 && weatherCode < 800) return descriptions[mainWeather] || '特殊天气';
+            if (weatherCode === 800) return '晴天';
+            if (weatherCode > 800 && weatherCode < 900) return '多云';
+            
+            return '未知天气';
+        }
+
+        // 获取城市天气数据
+        async function getCityWeather(cityKey) {
+            const city = cities[cityKey];
+            try {
+                // 获取当前天气
+                const currentResponse = await fetch(
+                    `${API_URL}/weather?lat=${city.lat}&lon=${city.lon}&appid=${API_KEY}&units=metric&lang=zh_cn`
+                );
+                const currentData = await currentResponse.json();
+
+                // 获取5天预报数据（每3小时一次）
+                const forecastResponse = await fetch(
+                    `${API_URL}/forecast?lat=${city.lat}&lon=${city.lon}&appid=${API_KEY}&units=metric&lang=zh_cn`
+                );
+                const forecastData = await forecastResponse.json();
+
+                return {
+                    current: currentData,
+                    forecast: forecastData
+                };
+            } catch (error) {
+                console.error(`获取${city.name}天气数据时出错:`, error);
+                return null;
+            }
+        }
+
+        // 更新天气数据显示
+        function updateWeatherDisplay(hangzhouData, xianData) {
+            // 更新杭州天气
+            if (hangzhouData) {
+                document.getElementById('hangzhou-today-temp').textContent = 
+                    `${Math.round(hangzhouData.current.main.temp)}°C ${getWeatherIcon(hangzhouData.current.weather[0].icon)}`;
+                document.getElementById('hangzhou-today-condition').textContent = 
+                    `天气: ${getWeatherDescription(hangzhouData.current.weather[0].id, hangzhouData.current.weather[0].main)}`;
+                document.getElementById('hangzhou-today-humidity').textContent = 
+                    `湿度: ${hangzhouData.current.main.humidity}%`;
+                document.getElementById('hangzhou-today-wind').textContent = 
+                    `风速: ${Math.round(hangzhouData.current.wind.speed * 3.6)} km/h`;
+
+                // 获取明天的天气预报
+                const tomorrowForecast = getNextDayForecast(hangzhouData.forecast.list);
+                if (tomorrowForecast) {
+                    document.getElementById('hangzhou-tomorrow-temp').textContent = 
+                        `${Math.round(tomorrowForecast.temp)}°C ${getWeatherIcon(tomorrowForecast.icon)}`;
+                    document.getElementById('hangzhou-tomorrow-condition').textContent = 
+                        `天气: ${getWeatherDescription(tomorrowForecast.code, tomorrowForecast.main)}`;
+                    document.getElementById('hangzhou-tomorrow-humidity').textContent = 
+                        `湿度: ${tomorrowForecast.humidity}%`;
+                    document.getElementById('hangzhou-tomorrow-wind').textContent = 
+                        `风速: ${Math.round(tomorrowForecast.windSpeed * 3.6)} km/h`;
+                }
+            }
+
+            // 更新西安天气
+            if (xianData) {
+                document.getElementById('xian-today-temp').textContent = 
+                    `${Math.round(xianData.current.main.temp)}°C ${getWeatherIcon(xianData.current.weather[0].icon)}`;
+                document.getElementById('xian-today-condition').textContent = 
+                    `天气: ${getWeatherDescription(xianData.current.weather[0].id, xianData.current.weather[0].main)}`;
+                document.getElementById('xian-today-humidity').textContent = 
+                    `湿度: ${xianData.current.main.humidity}%`;
+                document.getElementById('xian-today-wind').textContent = 
+                    `风速: ${Math.round(xianData.current.wind.speed * 3.6)} km/h`;
+
+                // 获取明天的天气预报
+                const tomorrowForecast = getNextDayForecast(xianData.forecast.list);
+                if (tomorrowForecast) {
+                    document.getElementById('xian-tomorrow-temp').textContent = 
+                        `${Math.round(tomorrowForecast.temp)}°C ${getWeatherIcon(tomorrowForecast.icon)}`;
+                    document.getElementById('xian-tomorrow-condition').textContent = 
+                        `天气: ${getWeatherDescription(tomorrowForecast.code, tomorrowForecast.main)}`;
+                    document.getElementById('xian-tomorrow-humidity').textContent = 
+                        `湿度: ${tomorrowForecast.humidity}%`;
+                    document.getElementById('xian-tomorrow-wind').textContent = 
+                        `风速: ${Math.round(tomorrowForecast.windSpeed * 3.6)} km/h`;
+                }
+            }
+        }
+
+        // 获取明天的天气预报
+        function getNextDayForecast(forecasts) {
+            const today = new Date();
+            const tomorrow = new Date();
+            tomorrow.setDate(today.getDate() + 1);
+            
+            // 查找明天的预报数据
+            const tomorrowForecasts = forecasts.filter(forecast => {
+                const forecastDate = new Date(forecast.dt * 1000);
+                return forecastDate.getDate() === tomorrow.getDate() && 
+                       forecastDate.getMonth() === tomorrow.getMonth();
+            });
+
+            if (tomorrowForecasts.length > 0) {
+                // 计算平均温度和其他指标
+                const temps = tomorrowForecasts.map(f => f.main.temp);
+                const avgTemp = temps.reduce((a, b) => a + b, 0) / temps.length;
+                
+                // 使用第一个预报的数据作为代表
+                const representative = tomorrowForecasts[0];
+                
+                return {
+                    temp: avgTemp,
+                    code: representative.weather[0].id,
+                    main: representative.weather[0].main,
+                    humidity: representative.main.humidity,
+                    windSpeed: representative.wind.speed,
+                    icon: representative.weather[0].icon
+                };
+            }
+            
+            return null;
+        }
+
+        // 根据天气图标代码返回emoji
+        function getWeatherIcon(iconCode) {
+            // 根据OpenWeatherMap的图标代码返回相应的emoji
+            if (iconCode.includes('01d') || iconCode.includes('01n')) return '☀️'; // Clear
+            if (iconCode.includes('02d') || iconCode.includes('02n')) return '🌤️'; // Few clouds
+            if (iconCode.includes('03d') || iconCode.includes('03n')) return '☁️'; // Scattered clouds
+            if (iconCode.includes('04d') || iconCode.includes('04n')) return '☁️'; // Broken clouds
+            if (iconCode.includes('09d') || iconCode.includes('09n')) return '🌧️'; // Shower rain
+            if (iconCode.includes('10d') || iconCode.includes('10n')) return '🌦️'; // Rain
+            if (iconCode.includes('11d') || iconCode.includes('11n')) return '⛈️'; // Thunderstorm
+            if (iconCode.includes('13d') || iconCode.includes('13n')) return '❄️'; // Snow
+            if (iconCode.includes('50d') || iconCode.includes('50n')) return '🌫️'; // Mist
+            
+            return '🌤️';
+        }
+
+        // 加载天气数据
+        async function loadWeatherData() {
+            try {
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('content').style.display = 'none';
+                document.getElementById('error').style.display = 'none';
+
+                // 并行获取两个城市的天气数据
+                const [hangzhouData, xianData] = await Promise.all([
+                    getCityWeather('hangzhou'),
+                    getCityWeather('xian')
+                ]);
+
+                // 检查是否有数据
+                if (!hangzhouData || !xianData) {
+                    throw new Error('无法获取天气数据');
+                }
+
+                // 更新显示
+                updateWeatherDisplay(hangzhouData, xianData);
+
+                // 隐藏加载指示器，显示内容
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+            } catch (error) {
+                console.error('加载天气数据时出错:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+
+        // 语言切换功能
         function switchLanguage(lang) {
             const buttons = document.querySelectorAll('.language-btn');
             buttons.forEach(btn => btn.classList.remove('active'));
@@ -267,6 +494,9 @@
                 document.querySelector('.language-btn:last-child').classList.add('active');
             }
         }
+
+        // 页面加载完成后获取天气数据
+        document.addEventListener('DOMContentLoaded', loadWeatherData);
     </script>
 </body>
 </html>
