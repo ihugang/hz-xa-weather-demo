@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天气预报 - 杭州 & 西安</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            padding: 30px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #2d3436;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #636e72;
+            margin-bottom: 20px;
+        }
+
+        .weather-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .city-weather {
+            background: linear-gradient(to bottom right, #74b9ff, #a29bfe);
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .city-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .day-weather {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+        }
+
+        .day-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .temperature {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+
+        .weather-info {
+            margin: 3px 0;
+            font-size: 0.95rem;
+        }
+
+        .navigation {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-button {
+            padding: 12px 24px;
+            background: #74b9ff;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-button:hover {
+            background: #0984e3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .language-toggle {
+            margin-top: 15px;
+        }
+
+        .language-btn {
+            padding: 8px 16px;
+            background: #636e72;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            margin: 0 5px;
+            transition: all 0.3s ease;
+        }
+
+        .language-btn.active {
+            background: #00b894;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .weather-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-button {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>天气预报</h1>
+            <div class="subtitle">杭州 & 西安 今明两日天气</div>
+        </header>
+
+        <div class="weather-container">
+            <!-- 杭州天气 -->
+            <div class="city-weather">
+                <div class="city-name">🏙️ 杭州</div>
+                
+                <!-- 今天天气 -->
+                <div class="day-weather">
+                    <div class="day-title">Today 今天</div>
+                    <div class="temperature">22°C ☀️</div>
+                    <div class="weather-info">天气: 晴朗</div>
+                    <div class="weather-info">湿度: 65%</div>
+                    <div class="weather-info">风速: 12 km/h</div>
+                </div>
+                
+                <!-- 明天天气 -->
+                <div class="day-weather">
+                    <div class="day-title">Tomorrow 明天</div>
+                    <div class="temperature">20°C 🌤️</div>
+                    <div class="weather-info">天气: 多云</div>
+                    <div class="weather-info">湿度: 70%</div>
+                    <div class="weather-info">风速: 10 km/h</div>
+                </div>
+            </div>
+
+            <!-- 西安天气 -->
+            <div class="city-weather">
+                <div class="city-name">🏛️ 西安</div>
+                
+                <!-- 今天天气 -->
+                <div class="day-weather">
+                    <div class="day-title">Today 今天</div>
+                    <div class="temperature">18°C 🌤️</div>
+                    <div class="weather-info">天气: 多云</div>
+                    <div class="weather-info">湿度: 55%</div>
+                    <div class="weather-info">风速: 8 km/h</div>
+                </div>
+                
+                <!-- 明天天气 -->
+                <div class="day-weather">
+                    <div class="day-title">Tomorrow 明天</div>
+                    <div class="temperature">16°C 🌦️</div>
+                    <div class="weather-info">天气: 阴转小雨</div>
+                    <div class="weather-info">湿度: 75%</div>
+                    <div class="weather-info">风速: 14 km/h</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <div class="nav-buttons">
+                <a href="weather_forecast_chinese.html" class="nav-button">详细预报 (中文)</a>
+                <a href="weather_real.html" class="nav-button">真实数据预报</a>
+            </div>
+            
+            <div class="language-toggle">
+                <button class="language-btn active" onclick="switchLanguage('zh')">中文</button>
+                <button class="language-btn" onclick="switchLanguage('en')">English</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchLanguage(lang) {
+            const buttons = document.querySelectorAll('.language-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            if(lang === 'zh') {
+                document.querySelector('.subtitle').textContent = '杭州 & 西安 今明两日天气';
+                document.querySelector('.city-name:nth-child(1)').innerHTML = '🏙️ 杭州';
+                document.querySelector('.city-name:nth-child(2)').innerHTML = '🏛️ 西安';
+                document.querySelector('.day-title:nth-child(1)').textContent = 'Today 今天';
+                document.querySelector('.day-title:nth-child(4)').textContent = 'Tomorrow 明天';
+                document.querySelector('.day-title:nth-child(6)').textContent = 'Today 今天';
+                document.querySelector('.day-title:nth-child(9)').textContent = 'Tomorrow 明天';
+                document.querySelector('.nav-button:nth-child(1)').textContent = '详细预报 (中文)';
+                document.querySelector('.nav-button:nth-child(2)').textContent = '真实数据预报';
+                document.querySelector('.language-btn:first-child').classList.add('active');
+            } else {
+                document.querySelector('.subtitle').textContent = 'Hangzhou & Xi\'an Next Two Days Weather';
+                document.querySelector('.city-name:nth-child(1)').innerHTML = '🏙️ Hangzhou';
+                document.querySelector('.city-name:nth-child(2)').innerHTML = '🏛️ Xi\'an';
+                document.querySelector('.day-title:nth-child(1)').textContent = '今天 Today';
+                document.querySelector('.day-title:nth-child(4)').textContent = '明天 Tomorrow';
+                document.querySelector('.day-title:nth-child(6)').textContent = '今天 Today';
+                document.querySelector('.day-title:nth-child(9)').textContent = '明天 Tomorrow';
+                document.querySelector('.nav-button:nth-child(1)').textContent = 'Detailed Forecast (Chinese)';
+                document.querySelector('.nav-button:nth-child(2)').textContent = 'Real Data Forecast';
+                document.querySelector('.language-btn:last-child').classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
